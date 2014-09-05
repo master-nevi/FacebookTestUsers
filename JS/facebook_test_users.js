@@ -1,3 +1,16 @@
+function bookmark() {
+    if (window.sidebar && window.sidebar.addPanel) { // Mozilla Firefox Bookmark
+    	window.sidebar.addPanel(document.title,window.location.href,'');
+    } else if(window.external && ('AddFavorite' in window.external)) { // IE Favorite
+    	window.external.AddFavorite(location.href,document.title); 
+    } else if(window.opera && window.print) { // Opera Hotlist
+    	this.title=document.title;
+    	return true;
+    } else { // webkit - safari/chrome
+    	alert('Press ' + (navigator.userAgent.toLowerCase().indexOf('mac') != - 1 ? 'Command/Cmd' : 'CTRL') + ' + D to bookmark this page.');
+    }
+}
+
 function getParameterByKeyFromQueryString(key, queryString) {
 	key = key.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 	var regex = new RegExp("[\\?&]" + key + "=([^&#]*)"),
@@ -48,8 +61,17 @@ function showTestUsers(facebookAppID, facebookAppSecret, isMobile) {
 							return aName.localeCompare(bName);
 						});
 
+						var bookMarkLink = $('<a href="#" rel="sidebar" title="bookmark this page">Bookmark This Page</a>');
+						bookMarkLink.click(function () {
+							bookmark();
+						});
+						$('#main-container').append(bookMarkLink);
+						$('#main-container').append($('<br /><br />'));
+
+
+
 						var orderedList = $("<ol>");
-						orderedList.append(linkItemArray);
+						orderedList.append(linkItemArray);						
 						$('#main-container').append(orderedList);						
 					};
 
