@@ -49,7 +49,7 @@ function showTestUsers(facebookAppID, facebookAppSecret, isMobile) {
 					var email = data["email"];
 					var testUserName = data["name"];
 					var baseURL = isMobile ? 'https://m.facebook.com/login.php' : 'https://facebook.com/login.php'; 
-					var linkItem = $('<li><p><a href="' + baseURL + '?' + $.param({ "email" : email}) + '">Log in as ' + testUserName + '</a></p></li>');
+					var linkItem = $('<li><p><a href="' + baseURL + '?' + $.param({ "email" : email}) + '">Log in as ' + testUserName + '</a>&nbsp;&nbsp;(<span class="copyText">' + email + '</span>)</p></li>');
 					linkItem.data("name" , testUserName);
 					linkItemArray.push(linkItem);
 
@@ -72,7 +72,23 @@ function showTestUsers(facebookAppID, facebookAppSecret, isMobile) {
 
 						var orderedList = $("<ol>");
 						orderedList.append(linkItemArray);						
-						$('#main-container').append(orderedList);						
+						$('#main-container').append(orderedList);
+
+						$('.copyText').click(function() {
+							if ($('#tmp').length) {
+								$('#tmp').remove();
+							}
+							var clickText = $(this).text();
+							$('<textarea id="tmp" />')
+							.appendTo($(this))
+							.val(clickText)
+							.focus()
+							.select();
+							return false;
+						});
+						$(':not(.copyText)').click(function(){
+							$('#tmp').remove();
+						});			
 					};
 
 
